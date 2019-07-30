@@ -31,6 +31,8 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private LiteWebView mWebView;
     private ImageView mPrevBtn;
     private ImageView mNextBtn;
+    private View mAdLimitRoot;
+    private View mWebRoot;
     private String mId;
     private String mUrl;
     private int mReadSecond;
@@ -81,6 +83,8 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         mNextBtn = view.findViewById(R.id.next_btn);
         mWebView = view.findViewById(R.id.webView);
         mProgress = view.findViewById(R.id.progressBar);
+        mWebRoot = view.findViewById(R.id.webRoot);
+        mAdLimitRoot = view.findViewById(R.id.ad_limit_root);
         mPrevBtn.setEnabled(false);
         mNextBtn.setEnabled(false);
         mPrevBtn.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +128,11 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             @Override
             public void onFailure(Throwable e) {
                 e.printStackTrace();
+                //收益上线
                 if (e instanceof ApiException && ((ApiException) e).getErrorCode() == 9991 && mListener != null) {
                     mListener.onAdvertisingLimit(((ApiException) e).getReaseon() + "");
+                    mAdLimitRoot.setVisibility(View.VISIBLE);
+                    mWebRoot.setVisibility(View.GONE);
                 } else {
                     ToastUtils.showShort(getContext(), e.getMessage() + "");
                     getActivity().finish();
