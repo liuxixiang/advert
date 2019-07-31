@@ -31,7 +31,7 @@ android {
     productFlavors {
         inland_qa {
             dimension 'channel'
-            buildConfigField 'String', 'BASE_URL', '"http://api_qa.beekuaibao.com"'
+            buildConfigField 'String', 'BASE_URL', '"http://api-qa.beekuaibao.com"'
         }
         inland {
             dimension 'channel'
