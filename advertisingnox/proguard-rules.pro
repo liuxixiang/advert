@@ -60,17 +60,26 @@
 # Marshmallow removed Notification.setLatestEventInfo()
 -dontwarn android.app.Notification
 
--keep class com.linken.advertising.NewsFeedsSDK$Builder{
+-keep class com.linken.advertising.AdvertisingSDK$Builder{
     public *;
 }
 
--keep class com.linken.advertising.NewsFeedsSDK{
+# 不混淆Fragment的子类类名以及onCreate()、onCreateView()方法名
+-keep class com.linken.advertising.AdvertisingFragment {
     public *;
 }
 
--keep class com.linken.advertising.ThreadUtils {
+-keep class com.linken.advertising.AdvertisingSDK{
+    public *;
+}
+
+
+-keep class com.linken.advertising.utils.ThreadUtils {
     *;
 }
+
+-keep public interface com.linken.advertising.AdvertisingSDK$IAdvertisingListener{ *; }
+
 
 
 
