@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
+import android.widget.TextView;
 
 
 import com.linken.advertising.net.ApiException;
@@ -34,11 +34,13 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private ImageView mNextBtn;
     private View mAdLimitRoot;
     private View mWebRoot;
+    private View mAdvertisingLayout;
     private String mId;
     private String mUrl;
     private int mReadSecond;
     private ProgressBar mProgress;
     private boolean isPageLoadFinished;
+    private TextView mHintMsgTextView;
     private AdvertisingSDK.IAdvertisingListener mListener;
 
     public static AdvertisingFragment newInstance() {
@@ -86,6 +88,8 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         mProgress = view.findViewById(R.id.progressBar);
         mWebRoot = view.findViewById(R.id.webRoot);
         mAdLimitRoot = view.findViewById(R.id.ad_limit_root);
+        mAdvertisingLayout = view.findViewById(R.id.layout);
+        mHintMsgTextView = view.findViewById(R.id.hint_msg);
         mPrevBtn.setEnabled(false);
         mNextBtn.setEnabled(false);
         mPrevBtn.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +137,7 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
                 if (e instanceof ApiException && ((ApiException) e).getErrorCode() == 9991 && mListener != null) {
                     mListener.onAdvertisingLimit(((ApiException) e).getReaseon() + "");
                     mAdLimitRoot.setVisibility(View.VISIBLE);
+                    mHintMsgTextView.setText(((ApiException) e).getReaseon() + "");
                     mWebRoot.setVisibility(View.GONE);
                 } else {
                     ToastUtils.showShort(getContext(), e.getMessage() + "");
@@ -166,14 +171,14 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             @Override
             public void onFailure(Throwable e) {
                 if (mListener != null) {
-                    mListener.onAdvertisingSucceed(false, mId,e);
+                    mListener.onAdvertisingSucceed(false, mId, mAdvertisingLayout, e);
                 }
             }
 
             @Override
             public void onSuccess(JSONObject response) {
                 if (mListener != null) {
-                    mListener.onAdvertisingSucceed(true, mId,null);
+                    mListener.onAdvertisingSucceed(true, mId, mAdvertisingLayout, null);
                 }
             }
         });

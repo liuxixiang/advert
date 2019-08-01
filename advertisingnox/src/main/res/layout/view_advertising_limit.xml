@@ -12,10 +12,10 @@
         android:src="@mipmap/ic_ad_limit_hint" />
 
     <TextView
+        android:id="@+id/hint_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="@string/sdk_ad_limit_hint"
         android:textColor="#333333"
         android:textSize="18sp" />
 
