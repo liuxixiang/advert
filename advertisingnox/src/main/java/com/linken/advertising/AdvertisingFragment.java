@@ -218,27 +218,6 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             }
         });
         mWebView.setPageLoadListener(this);
-        mWebView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (!TextUtils.isEmpty(url) && !url.startsWith("http") && !url.startsWith("https")) {
-                    Uri uri = Uri.parse(url);
-                    if (!TextUtils.isEmpty(uri.getScheme())) {
-                        try {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                            startActivity(intent);
-                        } catch (Exception e) {
-                            ToastUtils.showShort(getContext(), e.getMessage() + "");
-                        }
-                    }
-
-                    return true;
-                }
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-        });
-
 
         mWebView.setDownloadListener(new DownloadListener() {
             @Override
