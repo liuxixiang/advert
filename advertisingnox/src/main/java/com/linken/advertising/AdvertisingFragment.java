@@ -268,6 +268,10 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             mWebView.clearCache(true);
             mWebView.destroy();
         }
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
+        }
         super.onDestroy();
     }
 
