@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
 
 android {
     compileSdkVersion 27
@@ -57,4 +58,24 @@ dependencies {
     compileOnly "com.android.support:support-v4:27.1.1"
     compileOnly "com.android.support:appcompat-v7:27.1.1"
 
+}
+
+uploadArchives { //新增 ，因为Android Studio gradle 支持maven插件，所以可以添加此task
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+
+            pom.project {
+                version VERSION //版本名称 上传是不能和之前的一样，否则上传失败
+                artifactId GROUP_ID  //和前面网站上填写的一样
+                groupId GROUP  //和前面网站上填写的一样
+                packaging TYPE //填写aar
+                description DESCRIPTION //更新描述
+            }
+        }
+    }
 }
