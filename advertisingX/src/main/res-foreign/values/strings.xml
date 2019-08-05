@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">advertising</string>
+    <string name="close_page">close page</string>
+    <string name="count_down">%1$s</string>
+
+    <string name="sdk_webres_unsupport_download">Sorry, this operation is not supported</string>
+    <string name="sdk_ad_limit_hint">Page revenue today has reached the upper limit</string>
+    <string name="sdk_ad_come_tomorrow">Please come back tomorrow</string>
+
+</resources>

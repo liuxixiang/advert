@@ -1,0 +1,112 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        foreign {
+            res.srcDirs = ['res', 'src/main/res-foreign']
+        }
+
+    }
+
+    flavorDimensions('channel')
+    productFlavors {
+        inland_qa {
+            dimension 'channel'
+            buildConfigField 'String', 'BASE_URL', '"http://api-qa.beekuaibao.com"'
+        }
+        inland {
+            dimension 'channel'
+            buildConfigField 'String', 'BASE_URL', '"https://api.beekuaibao.com"'
+        }
+
+        foreign {
+            dimension 'channel'
+            buildConfigField 'String', 'BASE_URL', '"https://api.bitwires.com"'
+        }
+
+
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+apply plugin: 'maven-publish'
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+publishing {
+    publications {
+        advertisingX_inladn_qa(MavenPublication) {
+            groupId GROUP_ID
+            artifactId ARTIFACT_ID + "X-inland_qa"
+            version VERSION
+//            artifact(sourceJar)
+            artifact("$buildDir/outputs/aar/advertisingX-inland_qa-debug.aar")
+        }
+
+        advertisingX_inladn(MavenPublication) {
+            groupId GROUP_ID
+            artifactId ARTIFACT_ID + "X-inland"
+            version VERSION
+//            artifact(sourceJar)
+            artifact("$buildDir/outputs/aar/advertisingX-inland-release.aar")
+        }
+
+        advertisingX_foreign(MavenPublication) {
+            groupId GROUP_ID
+            artifactId ARTIFACT_ID + "X-foreign"
+            version VERSION
+//            artifact(sourceJar)
+            artifact("$buildDir/outputs/aar/advertisingX-foreign-release.aar")
+        }
+    }
+    repositories {
+        maven {
+            url "$buildDir/repo"
+        }
+    }
+
+//    repositories {
+//        maven {
+//            // 本地文件路径改成 "$buildDir/repo"
+//            url = MAVEN_REPO_RELEASE_URL
+//            // 本地文件不支持 credentials 这种认证，请注释掉
+//            credentials {
+//                username NEXUS_USERNAME
+//                password NEXUS_PASSWORD
+//            }
+//        }
+//    }
+}
+
+
+
