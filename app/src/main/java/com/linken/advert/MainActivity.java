@@ -29,14 +29,15 @@ public class MainActivity extends AppCompatActivity {
                 .setDebugEnabled(BuildConfig.DEBUG)
                 .build();
         AdvertisingSDK.getInstance().setIAdvertisingListener(new AdvertisingSDK.IAdvertisingListener() {
+
             @Override
-            public void onAdvertisingSucceed(boolean succeed, Throwable throwable) {
+            public void onAdvertisingSucceed(boolean b, String s, View view, Throwable throwable) {
 
             }
 
             @Override
             public void onAdvertisingLimit(String msg) {
-                ToastUtils.showShort(getApplicationContext(),msg +"");
+                ToastUtils.showShort(getApplicationContext(), msg + "");
             }
 
             @Override
