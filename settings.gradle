@@ -1,1 +1,1 @@
-include ':app', ':advertising'
+include ':app', ':advertisingX', ':advertising'
