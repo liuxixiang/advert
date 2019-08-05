@@ -69,15 +69,15 @@ publishing {
             groupId GROUP_ID
             artifactId ARTIFACT_ID + "-inland_qa"
             version VERSION
-            artifact(sourceJar)
+//            artifact(sourceJar)
             artifact("$buildDir/outputs/aar/advertising-inland_qa-debug.aar")
         }
 
         advertising_inladn(MavenPublication) {
             groupId GROUP_ID
-            artifactId ARTIFACT_ID+ "-inland"
+            artifactId ARTIFACT_ID + "-inland"
             version VERSION
-            artifact(sourceJar)
+//            artifact(sourceJar)
             artifact("$buildDir/outputs/aar/advertising-inland-release.aar")
         }
 
@@ -85,27 +85,27 @@ publishing {
             groupId GROUP_ID
             artifactId ARTIFACT_ID + "-foreign"
             version VERSION
-            artifact(sourceJar)
+//            artifact(sourceJar)
             artifact("$buildDir/outputs/aar/advertising-foreign-release.aar")
         }
     }
-    repositories {
-        maven {
-            url "$buildDir/repo"
-        }
-    }
-
 //    repositories {
 //        maven {
-//            // 本地文件路径改成 "file://e:/deploy"
-//            url = MAVEN_REPO_RELEASE_URL
-//            // 本地文件不支持 credentials 这种认证，请注释掉
-//            credentials {
-//                username NEXUS_USERNAME
-//                password NEXUS_PASSWORD
-//            }
+//            url "$buildDir/repo"
 //        }
 //    }
+
+    repositories {
+        maven {
+            // 本地文件路径改成 "$buildDir/repo"
+            url = MAVEN_REPO_RELEASE_URL
+            // 本地文件不支持 credentials 这种认证，请注释掉
+            credentials {
+                username NEXUS_USERNAME
+                password NEXUS_PASSWORD
+            }
+        }
+    }
 }
 
 
