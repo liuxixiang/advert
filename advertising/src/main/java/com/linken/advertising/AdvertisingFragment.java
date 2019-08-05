@@ -1,28 +1,36 @@
 package com.linken.advertising;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.DownloadListener;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
-import com.link.advertising.widget.SimpleWebChromeClient;
 import com.linken.advertising.net.ApiException;
 import com.linken.advertising.net.AsyncHttpClient;
 import com.linken.advertising.net.JsonObjectResponseHandler;
 import com.linken.advertising.net.RequestBase;
 import com.linken.advertising.utils.ToastUtils;
 import com.linken.advertising.widget.LiteWebView;
+import com.linken.advertising.widget.SimpleWebChromeClient;
 
 import org.json.JSONObject;
 
@@ -33,11 +41,13 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private ImageView mNextBtn;
     private View mAdLimitRoot;
     private View mWebRoot;
+    private View mAdvertisingLayout;
     private String mId;
     private String mUrl;
     private int mReadSecond;
     private ProgressBar mProgress;
     private boolean isPageLoadFinished;
+    private TextView mHintMsgTextView;
     private AdvertisingSDK.IAdvertisingListener mListener;
 
     public static AdvertisingFragment newInstance() {
@@ -85,6 +95,8 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         mProgress = view.findViewById(R.id.progressBar);
         mWebRoot = view.findViewById(R.id.webRoot);
         mAdLimitRoot = view.findViewById(R.id.ad_limit_root);
+        mAdvertisingLayout = view.findViewById(R.id.layout);
+        mHintMsgTextView = view.findViewById(R.id.hint_msg);
         mPrevBtn.setEnabled(false);
         mNextBtn.setEnabled(false);
         mPrevBtn.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +144,7 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
                 if (e instanceof ApiException && ((ApiException) e).getErrorCode() == 9991 && mListener != null) {
                     mListener.onAdvertisingLimit(((ApiException) e).getReaseon() + "");
                     mAdLimitRoot.setVisibility(View.VISIBLE);
+                    mHintMsgTextView.setText(((ApiException) e).getReaseon() + "");
                     mWebRoot.setVisibility(View.GONE);
                 } else {
                     ToastUtils.showShort(getContext(), e.getMessage() + "");
@@ -165,14 +178,14 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             @Override
             public void onFailure(Throwable e) {
                 if (mListener != null) {
-                    mListener.onAdvertisingSucceed(false, e);
+                    mListener.onAdvertisingSucceed(false, mId, mAdvertisingLayout, e);
                 }
             }
 
             @Override
             public void onSuccess(JSONObject response) {
                 if (mListener != null) {
-                    mListener.onAdvertisingSucceed(true, null);
+                    mListener.onAdvertisingSucceed(true, mId, mAdvertisingLayout, null);
                 }
             }
         });
@@ -205,6 +218,20 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             }
         });
         mWebView.setPageLoadListener(this);
+
+        mWebView.setDownloadListener(new DownloadListener() {
+            @Override
+            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void loadUrl(String url) {
@@ -261,6 +288,10 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             mWebView.clearHistory();
             mWebView.clearCache(true);
             mWebView.destroy();
+        }
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
         }
         super.onDestroy();
     }

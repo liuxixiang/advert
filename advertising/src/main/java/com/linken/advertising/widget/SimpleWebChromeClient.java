@@ -1,4 +1,4 @@
-package com.link.advertising.widget;
+package com.linken.advertising.widget;
 
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;

@@ -1,10 +1,13 @@
 package com.linken.advertising.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -16,13 +19,14 @@ import android.webkit.WebViewClient;
 import com.linken.advertising.BuildConfig;
 import com.linken.advertising.R;
 import com.linken.advertising.utils.CustomizedToastUtil;
+import com.linken.advertising.utils.ToastUtils;
 
 
 public class LiteWebView extends WebView {
 
     public static final String JS_HAMMER = "js_hammer";
     public static final String JS_THIRDPARTY = "js_thirdparty";
-    private com.link.advertising.widget.SimpleWebChromeClient mWebChromeClient;
+    private SimpleWebChromeClient mWebChromeClient;
     private Context mContext;
     private PageLoadListener mPageLoadedListener;
 
@@ -40,7 +44,6 @@ public class LiteWebView extends WebView {
         super(context, attrs, defStyleAttr);
         this.mContext = context;
     }
-
 
 
     Handler mHandler;
@@ -77,7 +80,7 @@ public class LiteWebView extends WebView {
             getSettings().setAllowFileAccessFromFileURLs(false);
             getSettings().setAllowUniversalAccessFromFileURLs(false);
         }
-        mWebChromeClient = new com.link.advertising.widget.SimpleWebChromeClient();
+        mWebChromeClient = new SimpleWebChromeClient();
         setWebChromeClient(mWebChromeClient);
 
 
@@ -102,29 +105,30 @@ public class LiteWebView extends WebView {
 
             }
 
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                if (TextUtils.isEmpty(url)) {
-//                    return true;
-//                }
-//
-//                String _url = url.toLowerCase();
-//
-//                if (!_url.startsWith("http://") && !_url.startsWith("https://")) {
-//                    if (_url.startsWith("intent://")) {//目前在任何情况下都不支持第三方应用打开2016年06月25日
-//                        return true;
-//                    } else if (SchemeUtil.hasAppInstalled(url)) {
-//                        SchemeUtil.openAppWithUrl(mContext, url);
-//                        return true;
-//                    } else if (SchemeUtil.isDialScheme(url)) {
-//                        SchemeUtil.openDialWithUrl(mContext, url);
-//                        return true;
-//                    } else {
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (TextUtils.isEmpty(url)) {
+                    return true;
+                }
+
+                url = url.toLowerCase();
+
+                if (!TextUtils.isEmpty(url) && !url.startsWith("http") && !url.startsWith("https")) {
+                    Uri uri = Uri.parse(url);
+                    if (!TextUtils.isEmpty(uri.getScheme())) {
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            getContext().startActivity(intent);
+                        } catch (Exception e) {
+                            ToastUtils.showShort(getContext(), e.getMessage() + "");
+                        }
+                    }
+
+                    return true;
+                }
+
+                return super.shouldOverrideUrlLoading(view, url);
+            }
         });
 
         setDownloadListener(new DownloadListener() {
@@ -145,7 +149,7 @@ public class LiteWebView extends WebView {
         void onPageLoadFinished();
     }
 
-    public void setChromeClientCallback(com.link.advertising.widget.SimpleWebChromeClient.OnProgressCallback onProgressCallback) {
+    public void setChromeClientCallback(SimpleWebChromeClient.OnProgressCallback onProgressCallback) {
         if (mWebChromeClient != null) {
             mWebChromeClient.setOnProgressCallback(onProgressCallback);
         }

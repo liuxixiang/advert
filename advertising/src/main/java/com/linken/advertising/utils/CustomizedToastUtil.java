@@ -95,34 +95,4 @@ public class CustomizedToastUtil {
         }
     }
 
-    /**
-     * 为了处理不同的网络错误及执行失败，需要显示不同的信息
-     *
-     * @param err
-     */
-    public static void showApiFailed(int err) {
-        int errId = R.string.sdk_server_error;
-        switch (err) {
-            case 700:
-                errId = R.string.sdk_server_failed;
-                break;
-            case 701:
-                errId = R.string.sdk_network_timeout;
-                break;
-            case 702:
-                errId = R.string.sdk_webservice_issue;
-                break;
-            case 703:
-                errId = R.string.sdk_empty_response;
-                break;
-            case 704:
-                errId = R.string.sdk_network_error_retry;
-                break;
-            default:
-                break;
-        }
-
-        showPrompt(errId, false);
-    }
-
 }

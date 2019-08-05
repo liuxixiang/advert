@@ -33,7 +33,7 @@ public class SystemUtil {
                 String imei = getRealIMEI();
                 String androidId = getAndroidId();
                 String serialNo;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     serialNo = Build.getSerial();
                 } else {
                     serialNo = Build.SERIAL;

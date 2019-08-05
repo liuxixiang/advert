@@ -2,6 +2,7 @@ package com.linken.advertising;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import com.linken.advertising.utils.ContextUtils;
 import com.linken.advertising.utils.LogUtils;
@@ -36,7 +37,7 @@ public class AdvertisingSDK {
 
     public static AdvertisingSDK getInstance() {
         if (sInstance == null) {
-            String msg = "SDK还未初始化呢，请先通过 AdvertisingSDK.Builder 进行初始化";
+            String msg = "SDK is not yet initialized，Please start by AdvertisingSDK.Builder initializing";
             throw new RuntimeException(msg);
         }
 
@@ -126,7 +127,8 @@ public class AdvertisingSDK {
     }
 
     public interface IAdvertisingListener {
-        void onAdvertisingSucceed(boolean succeed, Throwable throwable);
+        void onAdvertisingSucceed(boolean succeed, String id, View AdvertisingLayout, Throwable throwable);
+
         void onAdvertisingLimit(String msg);
 
         void onCountDown(int second);
