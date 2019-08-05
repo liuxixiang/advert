@@ -89,23 +89,23 @@ publishing {
             artifact("$buildDir/outputs/aar/advertisingX-foreign-release.aar")
         }
     }
-    repositories {
-        maven {
-            url "$buildDir/repo"
-        }
-    }
-
 //    repositories {
 //        maven {
-//            // 本地文件路径改成 "$buildDir/repo"
-//            url = MAVEN_REPO_RELEASE_URL
-//            // 本地文件不支持 credentials 这种认证，请注释掉
-//            credentials {
-//                username NEXUS_USERNAME
-//                password NEXUS_PASSWORD
-//            }
+//            url "$buildDir/repo"
 //        }
 //    }
+
+    repositories {
+        maven {
+            // 本地文件路径改成 "$buildDir/repo"
+            url = MAVEN_REPO_RELEASE_URL
+            // 本地文件不支持 credentials 这种认证，请注释掉
+            credentials {
+                username NEXUS_USERNAME
+                password NEXUS_PASSWORD
+            }
+        }
+    }
 }
 
 
