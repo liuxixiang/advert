@@ -40,6 +40,10 @@ android {
             dimension 'channel'
             buildConfigField 'String', 'BASE_URL', '"https://api.bitwires.com"'
         }
+        foreign_qa {
+            dimension 'channel'
+            buildConfigField 'String', 'BASE_URL', '"https://api-qa.bitwires.com"'
+        }
 
 
     }
@@ -87,6 +91,14 @@ publishing {
             version VERSION
 //            artifact(sourceJar)
             artifact("$buildDir/outputs/aar/advertisingX-foreign-release.aar")
+        }
+
+        advertisingX_foreign_qa(MavenPublication) {
+            groupId GROUP_ID
+            artifactId ARTIFACT_ID + "X-foreign_qa"
+            version VERSION
+//            artifact(sourceJar)
+            artifact("$buildDir/outputs/aar/advertisingX-foreign_qa-release.aar")
         }
     }
 //    repositories {
