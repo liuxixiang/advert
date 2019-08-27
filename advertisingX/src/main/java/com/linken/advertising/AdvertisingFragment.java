@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +41,8 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private ProgressBar mProgress;
     private boolean isPageLoadFinished;
     private AdvertisingSDK.IAdvertisingListener mListener;
+    private boolean isPause = false;//是否暂停
+    private boolean isCountDown = false;//是否正在倒计时
 
     public static AdvertisingFragment newInstance() {
         AdvertisingFragment fragment = new AdvertisingFragment();
@@ -53,6 +54,9 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            if (isPause) {
+                return;
+            }
             mReadSecond--;
             if (mListener != null) {
                 mListener.onCountDown(mReadSecond);
@@ -132,10 +136,13 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
                 e.printStackTrace();
                 //收益上线
                 if (e instanceof ApiException && ((ApiException) e).getErrorCode() == 9991 && mListener != null) {
+                    mAdvertisingLayout.setVisibility(View.GONE);
                     mListener.onAdvertisingLimit(((ApiException) e).getReaseon() + "");
+                } else {
+                    ToastUtils.showShort(getContext(), e.getMessage() + "");
+                    getActivity().finish();
                 }
-                ToastUtils.showShort(getContext(), e.getMessage() + "");
-                getActivity().finish();
+
             }
         });
     }
@@ -187,6 +194,7 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private void sendMessage() {
         Message message = handler.obtainMessage();
         handler.sendMessageDelayed(message, 1000);
+        isCountDown = true;
     }
 
     /**
@@ -282,4 +290,19 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         super.onDestroy();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isPause = false;
+        if (isCountDown) {
+            sendMessage();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isPause = true;
+    }
 }

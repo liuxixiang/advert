@@ -38,11 +38,11 @@ android {
 
         foreign {
             dimension 'channel'
-            buildConfigField 'String', 'BASE_URL', '"https://api.bitwires.com"'
+            buildConfigField 'String', 'BASE_URL', '"https://api.bitwires.mobi"'
         }
         foreign_qa {
             dimension 'channel'
-            buildConfigField 'String', 'BASE_URL', '"https://api-qa.bitwires.com"'
+            buildConfigField 'String', 'BASE_URL', '"http://api-qa.bitwires.beekuaibao.com"'
         }
 
 
