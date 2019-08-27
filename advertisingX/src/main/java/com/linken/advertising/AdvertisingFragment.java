@@ -35,15 +35,12 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private LiteWebView mWebView;
     private ImageView mPrevBtn;
     private ImageView mNextBtn;
-    private View mAdLimitRoot;
-    private View mWebRoot;
     private View mAdvertisingLayout;
     private String mId;
     private String mUrl;
     private int mReadSecond;
     private ProgressBar mProgress;
     private boolean isPageLoadFinished;
-    private TextView mHintMsgTextView;
     private AdvertisingSDK.IAdvertisingListener mListener;
 
     public static AdvertisingFragment newInstance() {
@@ -89,10 +86,7 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         mNextBtn = view.findViewById(R.id.next_btn);
         mWebView = view.findViewById(R.id.webView);
         mProgress = view.findViewById(R.id.progressBar);
-        mWebRoot = view.findViewById(R.id.webRoot);
-        mAdLimitRoot = view.findViewById(R.id.ad_limit_root);
         mAdvertisingLayout = view.findViewById(R.id.layout);
-        mHintMsgTextView = view.findViewById(R.id.hint_msg);
         mPrevBtn.setEnabled(false);
         mNextBtn.setEnabled(false);
         mPrevBtn.setOnClickListener(new View.OnClickListener() {
@@ -139,13 +133,9 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
                 //收益上线
                 if (e instanceof ApiException && ((ApiException) e).getErrorCode() == 9991 && mListener != null) {
                     mListener.onAdvertisingLimit(((ApiException) e).getReaseon() + "");
-                    mAdLimitRoot.setVisibility(View.VISIBLE);
-                    mHintMsgTextView.setText(((ApiException) e).getReaseon() + "");
-                    mWebRoot.setVisibility(View.GONE);
-                } else {
-                    ToastUtils.showShort(getContext(), e.getMessage() + "");
-                    getActivity().finish();
                 }
+                ToastUtils.showShort(getContext(), e.getMessage() + "");
+                getActivity().finish();
             }
         });
     }
