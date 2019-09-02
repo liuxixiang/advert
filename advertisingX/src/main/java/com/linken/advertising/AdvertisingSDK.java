@@ -15,6 +15,7 @@ public class AdvertisingSDK {
     private String mAppKey;
     private String mAppId;
     private boolean debug;
+    private boolean isShowCollect;
     private IAdvertisingListener mIAdvertisingListener;
 
     private AdvertisingSDK(Builder builder) {
@@ -22,6 +23,7 @@ public class AdvertisingSDK {
         this.mAppKey = builder.mAppKey;
         this.mAppId = builder.mAppId;
         this.debug = builder.debug;
+        this.isShowCollect = builder.isShowCollect;
 
         ContextUtils.init(this.mContext);
         LogUtils.setDebug(this.debug);
@@ -53,6 +55,9 @@ public class AdvertisingSDK {
         return mAppKey;
     }
 
+    public boolean isShowCollect() {
+        return isShowCollect;
+    }
 
     public static final class Builder {
 
@@ -60,6 +65,8 @@ public class AdvertisingSDK {
         private String mAppKey;
         private String mAppId;
         private boolean debug;
+        //是否显示收藏
+        private boolean isShowCollect = true;
 
 
         public Builder() {
@@ -71,6 +78,7 @@ public class AdvertisingSDK {
             this.mAppKey = feedsSDK.mAppKey;
             this.mAppId = feedsSDK.mAppId;
             this.debug = feedsSDK.debug;
+            this.isShowCollect = feedsSDK.isShowCollect;
         }
 
         public Builder setContext(Context context) {
@@ -86,6 +94,10 @@ public class AdvertisingSDK {
         public Builder setAppId(String id) {
             this.mAppId = id;
             return this;
+        }
+
+        public void setShowCollect(boolean showCollect) {
+            isShowCollect = showCollect;
         }
 
         public Builder setDebugEnabled(boolean debugEnabled) {

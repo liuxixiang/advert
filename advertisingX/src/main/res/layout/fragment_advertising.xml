@@ -26,23 +26,55 @@
             android:layout_weight="1" />
 
         <LinearLayout
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:background="@android:color/white"
-            android:gravity="center">
+            android:background="@android:color/white">
 
-            <ImageView
-                android:id="@+id/prev_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/bg_left_selector" />
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/next_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="100dp"
-                android:src="@drawable/bg_right_selector" />
+                <ImageView
+                    android:id="@+id/prev_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_left_selector" />
+
+                <ImageView
+                    android:id="@+id/next_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="60dp"
+                    android:src="@drawable/bg_right_selector" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="right"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/collect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_collect_selector" />
+
+                <ImageView
+                    android:id="@+id/browser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="60dp"
+                    android:src="@mipmap/ic_browser" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
