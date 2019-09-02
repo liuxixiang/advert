@@ -130,7 +130,12 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         mBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (TextUtils.isEmpty(mUrl)) {
+                    return;
+                }
+                Uri uri = Uri.parse(mUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         });
 
