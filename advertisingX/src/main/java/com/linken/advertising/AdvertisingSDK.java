@@ -96,8 +96,9 @@ public class AdvertisingSDK {
             return this;
         }
 
-        public void setShowCollect(boolean showCollect) {
+        public Builder setShowCollect(boolean showCollect) {
             isShowCollect = showCollect;
+            return this;
         }
 
         public Builder setDebugEnabled(boolean debugEnabled) {
