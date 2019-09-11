@@ -19,9 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.linken.advertising.bean.RequestAdCommit;
-import com.linken.advertising.bean.RequestHasDone;
-import com.linken.advertising.def.OperateType;
 import com.linken.advertising.net.ApiException;
 import com.linken.advertising.net.AsyncHttpClient;
 import com.linken.advertising.net.JsonObjectResponseHandler;
@@ -30,7 +27,6 @@ import com.linken.advertising.utils.ToastUtils;
 import com.linken.advertising.widget.LiteWebView;
 import com.linken.advertising.widget.SimpleWebChromeClient;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -48,9 +44,9 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private ProgressBar mProgress;
     private boolean isPageLoadFinished;
     private AdvertisingSDK.IAdvertisingListener mListener;
+    private AdvertisingSDK.IADCollectListener mAdCollectListener;
     private boolean isPause = false;//是否暂停
     private boolean isCountDown = false;//是否正在倒计时
-    private boolean hasDone;//是否有这行为
 
     public static AdvertisingFragment newInstance() {
         AdvertisingFragment fragment = new AdvertisingFragment();
@@ -87,7 +83,8 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mListener = AdvertisingSDK.getInstance().getIAdvertisingListener();
+        mListener = AdvertisingSDK.getInstance().getAdvertisingListener();
+        mAdCollectListener = AdvertisingSDK.getInstance().getAdCollectListener();
         initViews(view);
         initWebView();
         distributead();
@@ -124,7 +121,10 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         mCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                commit();
+//                commit();
+                if(mAdCollectListener != null) {
+                    mAdCollectListener.onCollectClick(mId,mCollect);
+                }
             }
         });
         mBrowser.setOnClickListener(new View.OnClickListener() {
@@ -141,57 +141,6 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
 
     }
 
-
-    private void hasDone(String id) {
-        RequestHasDone requestHasDone = new RequestHasDone(id, OperateType.TYPE_COLLECT);
-        new AsyncHttpClient().get(requestHasDone, new JsonObjectResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                if (response != null) {
-                    if (response.has("data")) {
-                        JSONObject jsonObject = response.optJSONObject("data");
-                        if (jsonObject != null) {
-                            try {
-                                hasDone = jsonObject.getBoolean("hasDone");
-                                showCollect(hasDone);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private void commit() {
-        if (TextUtils.isEmpty(mId)) {
-            return;
-        }
-        RequestAdCommit requestHasDone = new RequestAdCommit(mId, OperateType.TYPE_COLLECT);
-        new AsyncHttpClient().post(requestHasDone, new JsonObjectResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                if (response != null) {
-                    hasDone = !hasDone;
-                    showCollect(hasDone);
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                e.printStackTrace();
-                ToastUtils.showShort(getContext(), e.getMessage());
-            }
-        });
-    }
-
-
     private void distributead() {
         new AsyncHttpClient().get(SDKContants.URL_DISTRIBUTEAD, new JsonObjectResponseHandler() {
             @Override
@@ -205,7 +154,11 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
                             mUrl = jsonObject.optString("url");
                             mReadSecond = jsonObject.optInt("readSecond");
                             onAistributeadSuccess();
-                            hasDone(mId);
+
+//                            hasDone(mId);
+                            if(mAdCollectListener != null) {
+                                mAdCollectListener.showCollect(mId,mCollect);
+                            }
                         }
                     }
                 }
@@ -386,16 +339,4 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
         isPause = true;
     }
 
-    /**
-     * 显示收藏按钮
-     */
-    private void showCollect(boolean isCollect) {
-        if (AdvertisingSDK.getInstance().isShowCollect()) {
-            mCollect.setVisibility(View.VISIBLE);
-            mCollect.setSelected(isCollect);
-        } else {
-            mCollect.setVisibility(View.INVISIBLE);
-        }
-
-    }
 }

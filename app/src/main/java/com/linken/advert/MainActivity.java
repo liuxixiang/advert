@@ -2,8 +2,10 @@ package com.linken.advert;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.linken.advertising.AdvertisingFragment;
@@ -19,16 +21,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTime = findViewById(R.id.time);
+        findViewById(R.id.close_page).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent m = new Intent(MainActivity.this, SecActivity.class);
+                startActivity(m);
+            }
+        });
         /**
          * 初始化SDK
          */
         new AdvertisingSDK.Builder()
-                .setAppId("beekuaibao")
-                .setAppKey("72649e5e146a8a058c0362708da862f1")
+                .setAppId("bitwires")
+                .setAppKey("a6e0a011bb62cdcaeab1af13b2626404")
                 .setContext(getApplicationContext())
                 .setDebugEnabled(BuildConfig.DEBUG)
                 .build();
-        AdvertisingSDK.getInstance().setIAdvertisingListener(new AdvertisingSDK.IAdvertisingListener() {
+        AdvertisingSDK.getInstance().setCollectListener(new AdvertisingSDK.IADCollectListener() {
+            @Override
+            public void showCollect(String id, ImageView collectView) {
+
+            }
+
+            @Override
+            public void onCollectClick(String id, ImageView collectView) {
+
+            }
+
+        });
+        AdvertisingSDK.getInstance().setAdvertisingListener(new AdvertisingSDK.IAdvertisingListener() {
 
             @Override
             public void onAdvertisingSucceed(boolean b, String s, View view, Throwable throwable) {

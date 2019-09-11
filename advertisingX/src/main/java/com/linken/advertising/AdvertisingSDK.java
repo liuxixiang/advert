@@ -3,6 +3,7 @@ package com.linken.advertising;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.linken.advertising.utils.ContextUtils;
 import com.linken.advertising.utils.LogUtils;
@@ -15,27 +16,35 @@ public class AdvertisingSDK {
     private String mAppKey;
     private String mAppId;
     private boolean debug;
-    private boolean isShowCollect;
-    private IAdvertisingListener mIAdvertisingListener;
+    private IAdvertisingListener mAdvertisingListener;
+    private IADCollectListener mAdCollectListener;
 
     private AdvertisingSDK(Builder builder) {
         this.mContext = builder.mContext;
         this.mAppKey = builder.mAppKey;
         this.mAppId = builder.mAppId;
         this.debug = builder.debug;
-        this.isShowCollect = builder.isShowCollect;
 
         ContextUtils.init(this.mContext);
         LogUtils.setDebug(this.debug);
     }
 
-    public void setIAdvertisingListener(IAdvertisingListener iAdvertisingListener) {
-        this.mIAdvertisingListener = iAdvertisingListener;
+    public void setAdvertisingListener(IAdvertisingListener advertisingListener) {
+        this.mAdvertisingListener = advertisingListener;
     }
 
-    public IAdvertisingListener getIAdvertisingListener() {
-        return this.mIAdvertisingListener;
+    public IAdvertisingListener getAdvertisingListener() {
+        return this.mAdvertisingListener;
     }
+
+    public void setCollectListener(IADCollectListener adCollectListener) {
+        this.mAdCollectListener = adCollectListener;
+    }
+
+    public IADCollectListener getAdCollectListener() {
+        return mAdCollectListener;
+    }
+
 
     public static AdvertisingSDK getInstance() {
         if (sInstance == null) {
@@ -55,9 +64,7 @@ public class AdvertisingSDK {
         return mAppKey;
     }
 
-    public boolean isShowCollect() {
-        return isShowCollect;
-    }
+
 
     public static final class Builder {
 
@@ -65,8 +72,6 @@ public class AdvertisingSDK {
         private String mAppKey;
         private String mAppId;
         private boolean debug;
-        //是否显示收藏
-        private boolean isShowCollect = true;
 
 
         public Builder() {
@@ -78,7 +83,6 @@ public class AdvertisingSDK {
             this.mAppKey = feedsSDK.mAppKey;
             this.mAppId = feedsSDK.mAppId;
             this.debug = feedsSDK.debug;
-            this.isShowCollect = feedsSDK.isShowCollect;
         }
 
         public Builder setContext(Context context) {
@@ -96,10 +100,6 @@ public class AdvertisingSDK {
             return this;
         }
 
-        public Builder setShowCollect(boolean showCollect) {
-            isShowCollect = showCollect;
-            return this;
-        }
 
         public Builder setDebugEnabled(boolean debugEnabled) {
             this.debug = debugEnabled;
@@ -147,6 +147,13 @@ public class AdvertisingSDK {
         void onCountDown(int second);
 
         void onPageLoadFinished();
+
+    }
+
+    public interface IADCollectListener {
+        void showCollect(String id, ImageView collectView);
+
+        void onCollectClick(String id, ImageView collectView);
 
     }
 }
