@@ -79,8 +79,7 @@
 }
 
 -keep public interface com.linken.advertising.AdvertisingSDK$IAdvertisingListener{ *; }
-
-
+-keep public interface com.linken.advertising.AdvertisingSDK$IADCollectListener{ *; }
 
 
 
