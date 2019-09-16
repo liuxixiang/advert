@@ -47,6 +47,7 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
     private AdvertisingSDK.IADCollectListener mAdCollectListener;
     private boolean isPause = false;//是否暂停
     private boolean isCountDown = false;//是否正在倒计时
+    private String mAdId;
 
     public static AdvertisingFragment newInstance() {
         AdvertisingFragment fragment = new AdvertisingFragment();
@@ -122,8 +123,8 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             @Override
             public void onClick(View view) {
 //                commit();
-                if(mAdCollectListener != null) {
-                    mAdCollectListener.onCollectClick(mId,mCollect);
+                if (mAdCollectListener != null) {
+                    mAdCollectListener.onCollectClick(mAdId, mCollect);
                 }
             }
         });
@@ -149,15 +150,15 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
                     if (response.has("data")) {
                         JSONObject jsonObject = response.optJSONObject("data");
                         if (jsonObject != null) {
-                            mId = jsonObject.optString("id");
-//                            mAdId = jsonObject.optString("adId");
-                            mUrl = jsonObject.optString("url");
-                            mReadSecond = jsonObject.optInt("readSecond");
+                            mId = jsonObject.has("id") ? jsonObject.optString("id") : "";
+                            mAdId = jsonObject.has("adId") ? jsonObject.optString("adId") : "";
+                            mUrl = jsonObject.has("url") ? jsonObject.optString("url") : "";
+                            mReadSecond = jsonObject.has("readSecond") ? jsonObject.optInt("readSecond") : 0;
                             onAistributeadSuccess();
 
 //                            hasDone(mId);
-                            if(mAdCollectListener != null) {
-                                mAdCollectListener.showCollect(mId,mCollect);
+                            if (mAdCollectListener != null) {
+                                mAdCollectListener.showCollect(mAdId, mCollect);
                             }
                         }
                     }
