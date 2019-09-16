@@ -1,6 +1,8 @@
 package com.linken.advertising.net;
 
 
+import android.text.TextUtils;
+
 import com.linken.advertising.AdvertisingSDK;
 import com.linken.advertising.utils.EncryptUtil;
 import com.linken.advertising.utils.SystemUtil;
@@ -23,7 +25,8 @@ public class AsyncHttpClient extends SyncHttpClient {
     private void addHeaders() {
         addHeader("osType", "andorid");
         addHeader("appId", AdvertisingSDK.getInstance().getAppId());
-        addHeader("deviceId", SystemUtil.generateFakeImei());
+        addHeader("deviceId", (!TextUtils.isEmpty(AdvertisingSDK.getInstance().getDeviceId()) && !"null".equals(AdvertisingSDK.getInstance().getDeviceId().toLowerCase()))
+                ? AdvertisingSDK.getInstance().getDeviceId() : SystemUtil.generateFakeImei());
         addHeader("thirdUid", EncryptUtil.getMD5_32(SystemUtil.generateFakeImei() + AdvertisingSDK.getInstance().getAppKey()));
     }
 

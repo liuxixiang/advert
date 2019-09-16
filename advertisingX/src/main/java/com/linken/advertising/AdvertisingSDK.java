@@ -17,6 +17,7 @@ public class AdvertisingSDK {
     private String mAppId;
     private boolean debug;
     private String mAuthorization;
+    private String mDeviceId;
     private IAdvertisingListener mAdvertisingListener;
     private IADCollectListener mAdCollectListener;
 
@@ -26,6 +27,7 @@ public class AdvertisingSDK {
         this.mAppId = builder.mAppId;
         this.debug = builder.debug;
         this.mAuthorization = builder.mAuthorization;
+        this.mDeviceId = builder.mDeviceId;
 
         ContextUtils.init(this.mContext);
         LogUtils.setDebug(this.debug);
@@ -70,12 +72,17 @@ public class AdvertisingSDK {
         return mAuthorization;
     }
 
+    public String getDeviceId() {
+        return mDeviceId;
+    }
+
     public static final class Builder {
 
         private Context mContext;
         private String mAppKey;
         private String mAppId;
         private String mAuthorization;
+        private String mDeviceId;
         private boolean debug;
 
 
@@ -89,6 +96,7 @@ public class AdvertisingSDK {
             this.mAppId = feedsSDK.mAppId;
             this.debug = feedsSDK.debug;
             this.mAuthorization = feedsSDK.mAuthorization;
+            this.mDeviceId = feedsSDK.mDeviceId;
         }
 
         public Builder setContext(Context context) {
@@ -146,6 +154,11 @@ public class AdvertisingSDK {
 
         public Builder setAuthorization(String authorization) {
             this.mAuthorization = authorization;
+            return this;
+        }
+
+        public Builder setDeviceId(String deviceId) {
+            this.mDeviceId = deviceId;
             return this;
         }
     }
