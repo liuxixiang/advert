@@ -16,6 +16,7 @@ public class AdvertisingSDK {
     private String mAppKey;
     private String mAppId;
     private boolean debug;
+    private String mAuthorization;
     private IAdvertisingListener mAdvertisingListener;
     private IADCollectListener mAdCollectListener;
 
@@ -24,6 +25,7 @@ public class AdvertisingSDK {
         this.mAppKey = builder.mAppKey;
         this.mAppId = builder.mAppId;
         this.debug = builder.debug;
+        this.mAuthorization = builder.mAuthorization;
 
         ContextUtils.init(this.mContext);
         LogUtils.setDebug(this.debug);
@@ -64,13 +66,16 @@ public class AdvertisingSDK {
         return mAppKey;
     }
 
-
+    public String getAuthorization() {
+        return mAuthorization;
+    }
 
     public static final class Builder {
 
         private Context mContext;
         private String mAppKey;
         private String mAppId;
+        private String mAuthorization;
         private boolean debug;
 
 
@@ -83,6 +88,7 @@ public class AdvertisingSDK {
             this.mAppKey = feedsSDK.mAppKey;
             this.mAppId = feedsSDK.mAppId;
             this.debug = feedsSDK.debug;
+            this.mAuthorization = feedsSDK.mAuthorization;
         }
 
         public Builder setContext(Context context) {
@@ -136,6 +142,11 @@ public class AdvertisingSDK {
                 }
                 return null;
             }
+        }
+
+        public Builder setAuthorization(String authorization) {
+            this.mAuthorization = authorization;
+            return this;
         }
     }
 
