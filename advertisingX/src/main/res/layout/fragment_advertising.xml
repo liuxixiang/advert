@@ -25,6 +25,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@mipmap/shape_shadow" />
+
         <LinearLayout
             android:paddingRight="30dp"
             android:paddingLeft="30dp"
