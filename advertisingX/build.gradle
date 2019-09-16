@@ -38,7 +38,7 @@ android {
 
         foreign {
             dimension 'channel'
-            buildConfigField 'String', 'BASE_URL', '"https://api.bitwires.mobi"'
+            buildConfigField 'String', 'BASE_URL', '"https://api.bitwires.site"'
         }
         foreign_qa {
             dimension 'channel'
