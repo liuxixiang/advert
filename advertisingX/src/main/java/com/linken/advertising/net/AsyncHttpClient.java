@@ -12,6 +12,8 @@ import java.util.concurrent.Executors;
 
 public class AsyncHttpClient extends SyncHttpClient {
     private final ExecutorService threadPool;
+    private String deviceId = (!TextUtils.isEmpty(AdvertisingSDK.getInstance().getDeviceId()) && !"null".equals(AdvertisingSDK.getInstance().getDeviceId().toLowerCase()))
+            ? AdvertisingSDK.getInstance().getDeviceId() : SystemUtil.generateFakeImei();
 
     public AsyncHttpClient() {
         super();
@@ -25,9 +27,8 @@ public class AsyncHttpClient extends SyncHttpClient {
     private void addHeaders() {
         addHeader("osType", "andorid");
         addHeader("appId", AdvertisingSDK.getInstance().getAppId());
-        addHeader("deviceId", (!TextUtils.isEmpty(AdvertisingSDK.getInstance().getDeviceId()) && !"null".equals(AdvertisingSDK.getInstance().getDeviceId().toLowerCase()))
-                ? AdvertisingSDK.getInstance().getDeviceId() : SystemUtil.generateFakeImei());
-        addHeader("thirdUid", EncryptUtil.getMD5_32(SystemUtil.generateFakeImei() + AdvertisingSDK.getInstance().getAppKey()));
+        addHeader("deviceId", deviceId);
+        addHeader("thirdUid", EncryptUtil.getMD5_32(deviceId + AdvertisingSDK.getInstance().getAppKey()));
     }
 
     @Override

@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         new AdvertisingSDK.Builder()
                 .setAppId("bitwires")
                 .setAppKey("a6e0a011bb62cdcaeab1af13b2626404")
+                .setAuthorization("dkdk")
+                .setDeviceId("jjfjfjf")
                 .setContext(getApplicationContext())
                 .setDebugEnabled(BuildConfig.DEBUG)
                 .build();
