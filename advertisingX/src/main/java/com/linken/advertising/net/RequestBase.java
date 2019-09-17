@@ -1,10 +1,8 @@
 package com.linken.advertising.net;
 
 
-import com.linken.advertising.AdvertisingSDK;
 import com.linken.advertising.SDKContants;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -24,9 +22,7 @@ public abstract class RequestBase {
     }
 
     protected Map<String, String> getHeaders() {
-        Map<String, String> map = new HashMap<>();
-        map.put("Authorization", AdvertisingSDK.getInstance().getAuthorization() + "");
-        return map;
+        return null;
     }
 
     protected String getBody() {

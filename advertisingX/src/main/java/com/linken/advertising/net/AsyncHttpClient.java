@@ -29,6 +29,7 @@ public class AsyncHttpClient extends SyncHttpClient {
         addHeader("appId", AdvertisingSDK.getInstance().getAppId());
         addHeader("deviceId", deviceId);
         addHeader("thirdUid", EncryptUtil.getMD5_32(deviceId + AdvertisingSDK.getInstance().getAppKey()));
+        addHeader("Authorization", AdvertisingSDK.getInstance().getAuthorization() + "");
     }
 
     @Override
