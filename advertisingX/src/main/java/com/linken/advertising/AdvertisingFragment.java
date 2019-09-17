@@ -62,7 +62,9 @@ public class AdvertisingFragment extends Fragment implements SimpleWebChromeClie
             if (isPause) {
                 return;
             }
-            mReadSecond--;
+            if(mReadSecond > 0) {
+                mReadSecond--;
+            }
             if (mListener != null) {
                 mListener.onCountDown(mReadSecond);
             }
